@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannada Scoopz - Smart Budget Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+        }
+        
+        .section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .hint {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .recommendation-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .recommendation-card h3 {
+            color: #495057;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .percentage {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px 40px;
+        }
+        
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid #667eea;
+        }
+        
+        .summary-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+        
+        .summary-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .alert {
+            margin: 20px 40px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+        
+        .alert-warning {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+            color: #212529;
+        }
+        
+        .alert-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+        }
+        
+        .sip-section {
+            background: #f8f9fa;
+            margin: 20px 40px;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .sip-section h3 {
+            color: #495057;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+        }
+        
+        .sip-current {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .sip-current h4 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .sip-amount {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .projections-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .projection-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+        
+        .projection-card h4 {
+            color: #495057;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .projection-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .projection-item:last-child {
+            border-bottom: none;
+            border-top: 2px solid #667eea;
+            font-weight: bold;
+            margin-top: 10px;
+            padding-top: 15px;
+        }
+        
+        .projection-value {
+            font-weight: 600;
+        }
+        
+        .projection-value.positive {
+            color: #28a745;
+        }
+        
+        .tips-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .tips-section h4 {
+            color: #495057;
+            margin-bottom: 15px;
+        }
+        
+        .tips-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .tips-section li {
+            padding: 5px 0;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .tips-section li:before {
+            content: "• ";
+            color: #17a2b8;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+                gap: 20px;
+            }
+            
+            .projections-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                padding: 20px;
+            }
+            
+            .sip-section {
+                margin: 20px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Kannada Scoopz - Smart Budget Planner</h1>
+            <p>Personal Financial Planning & SIP Investment Calculator</p>
+        </div>
+        
+        <!-- Main Input and Recommendations Grid -->
+        <div class="main-grid">
+            <!-- Input Section -->
+            <div class="section">
+                <h2>💰 Your Financial Information</h2>
+                
+                <div class="form-group">
+                    <label for="monthlyIncome">Monthly Income (Gross)</label>
+                    <input type="number" id="monthlyIncome" placeholder="e.g., 100000" min="0" step="1000">
+                    <div class="hint">Enter your total monthly salary before deductions</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fixedExpenses">Fixed Monthly Expenses</label>
+                    <input type="number" id="fixedExpenses" placeholder="e.g., 50000" min="0" step="1000">
+                    <div class="hint">Rent, utilities, EMIs, insurance, etc.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="variableExpenses">Variable Monthly Expenses</label>
+                    <input type="number" id="variableExpenses" placeholder="e.g., 25000" min="0" step="1000">
+                    <div class="hint">Food, entertainment, shopping, travel, etc.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="riskProfile">Investment Risk Profile</label>
+                    <select id="riskProfile">
+                        <option value="conservative">Conservative (8-10% returns)</option>
+                        <option value="moderate" selected>Moderate (10-12% returns)</option>
+                        <option value="aggressive">Aggressive (12-15% returns)</option>
+                    </select>
+                    <div class="hint">Your comfort level with market volatility</div>
+                </div>
+            </div>
+            
+            <!-- Recommendations Section -->
+            <div class="section">
+                <h2>🎯 Smart Recommendations</h2>
+                
+                <div class="recommendation-card">
+                    <h3>
+                        Available Monthly Savings
+                        <span class="percentage" id="availablePercent">0%</span>
+                    </h3>
+                    <div class="amount" id="availableAmount">₹0</div>
+                    <div class="description">What you have left after all expenses</div>
+                </div>
+                
+                <div class="recommendation-card">
+                    <h3>
+                        Recommended Savings (20% Rule)
+                        <span class="percentage">20%</span>
+                    </h3>
+                    <div class="amount" id="recommendedSavings">₹0</div>
+                    <div class="description">Financial experts recommend saving 20% of income</div>
+                </div>
+                
+                <div class="recommendation-card">
+                    <h3>
+                        Optimal SIP Amount
+                        <span class="percentage">15%</span>
+                    </h3>
+                    <div class="amount" id="optimalSIP">₹0</div>
+                    <div class="description">15% of income for long-term wealth building</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Summary Cards -->
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div class="summary-value" id="totalIncome">₹0</div>
+                <div class="summary-label">Monthly Income</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="totalExpenses">₹0</div>
+                <div class="summary-label">Total Expenses</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="savingsAvailable">₹0</div>
+                <div class="summary-label">Available for Savings</div>
+            </div>
+        </div>
+        
+        <!-- Status Alert -->
+        <div id="statusAlert"></div>
+        
+        <!-- SIP Investment Projections -->
+        <div class="sip-section">
+            <h3>📈 SIP Investment Projections</h3>
+            
+            <div class="sip-current">
+                <h4>Monthly SIP Investment Capacity</h4>
+                <div class="sip-amount" id="sipCapacity">₹0</div>
+                <div id="sipNote">Enter your income and expenses above to see projections</div>
+            </div>
+            
+            <div class="projections-grid">
+                <div class="projection-card">
+                    <h4>⏰ 10 Year Projection</h4>
+                    <div class="projection-item">
+                        <span>Total Investment:</span>
+                        <span class="projection-value" id="invested10">₹0</span>
+                    </div>
+                    <div class="projection-item">
+                        <span>Expected Returns:</span>
+                        <span class="projection-value positive" id="returns10">₹0</span>
+                    </div>
+                    <div class="projection-item">
+                        <span>Total Corpus:</span>
+                        <span class="projection-value positive" id="corpus10">₹0</span>
+                    </div>
+                </div>
+                
+                <div class="projection-card">
+                    <h4>⏰ 20 Year Projection</h4>
+                    <div class="projection-item">
+                        <span>Total Investment:</span>
+                        <span class="projection-value" id="invested20">₹0</span>
+                    </div>
+                    <div class="projection-item">
+                        <span>Expected Returns:</span>
+                        <span class="projection-value positive" id="returns20">₹0</span>
+                    </div>
+                    <div class="projection-item">
+                        <span>Total Corpus:</span>
+                        <span class="projection-value positive" id="corpus20">₹0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tips-section">
+                <h4>💡 Investment Strategy Tips</h4>
+                <ul id="investmentTips">
+                    <li>Enter your financial details to get personalized investment recommendations</li>
+                    <li>Start with low-cost index funds for diversified market exposure</li>
+                    <li>Consider systematic investment plans (SIP) for rupee cost averaging</li>
+                    <li>Increase your SIP amount by 10% annually for better wealth creation</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div style="background: #f8f9fa; text-align: center; padding: 25px; border-top: 1px solid #e9ecef; color: #666; font-size: 0.95rem;">
+            <p style="margin: 0;">Follow <strong style="color: #667eea;">@kannada_scoopz</strong> on Instagram for more smart money tips & lessons</p>
+        </div>
+    </div>
+
+    <script>
+        // Get all input elements
+        const inputs = ['monthlyIncome', 'fixedExpenses', 'variableExpenses', 'riskProfile'];
+        
+        // Add event listeners to all inputs
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', calculateBudget);
+            document.getElementById(id).addEventListener('change', calculateBudget);
+        });
+        
+        function calculateBudget() {
+            // Get input values
+            const income = parseFloat(document.getElementById('monthlyIncome').value) || 0;
+            const fixed = parseFloat(document.getElementById('fixedExpenses').value) || 0;
+            const variable = parseFloat(document.getElementById('variableExpenses').value) || 0;
+            const riskProfile = document.getElementById('riskProfile').value;
+            
+            // Reset if no income
+            if (income === 0) {
+                resetAllDisplays();
+                return;
+            }
+            
+            // Calculate basic amounts
+            const totalExpenses = fixed + variable;
+            const availableSavings = Math.max(0, income - totalExpenses);
+            const recommendedSavings = income * 0.20; // 20% rule
+            const optimalSIP = income * 0.15; // 15% for investments
+            
+            // Update displays
+            updateSummaryCards(income, totalExpenses, availableSavings);
+            updateRecommendations(availableSavings, income, recommendedSavings, optimalSIP);
+            updateSIPProjections(availableSavings, optimalSIP, riskProfile);
+            showStatusAlert(income, totalExpenses, availableSavings, recommendedSavings);
+        }
+        
+        function updateSummaryCards(income, expenses, available) {
+            document.getElementById('totalIncome').textContent = formatCurrency(income);
+            document.getElementById('totalExpenses').textContent = formatCurrency(expenses);
+            document.getElementById('savingsAvailable').textContent = formatCurrency(available);
+            
+            // Color code available savings
+            const savingsElement = document.getElementById('savingsAvailable');
+            if (available <= 0) {
+                savingsElement.style.color = '#dc3545';
+            } else if (available >= income * 0.20) {
+                savingsElement.style.color = '#28a745';
+            } else {
+                savingsElement.style.color = '#ffc107';
+            }
+        }
+        
+        function updateRecommendations(available, income, recommended, optimal) {
+            // Available savings
+            document.getElementById('availableAmount').textContent = formatCurrency(available);
+            const availablePercent = income > 0 ? Math.round((available / income) * 100) : 0;
+            document.getElementById('availablePercent').textContent = availablePercent + '%';
+            
+            // Recommended savings (20% rule)
+            document.getElementById('recommendedSavings').textContent = formatCurrency(recommended);
+            
+            // Optimal SIP (15% rule)
+            document.getElementById('optimalSIP').textContent = formatCurrency(optimal);
+        }
+        
+        function updateSIPProjections(available, optimal, riskProfile) {
+            // Use the smaller of available or optimal for conservative projection
+            const sipAmount = Math.min(available * 0.8, optimal); // 80% of available or optimal, whichever is smaller
+            
+            document.getElementById('sipCapacity').textContent = formatCurrency(sipAmount);
+            
+            if (sipAmount === 0) {
+                resetSIPProjections();
+                document.getElementById('sipNote').textContent = 'Reduce expenses to free up money for investments';
+                return;
+            }
+            
+            // Set return rate based on risk profile
+            let annualRate = 0.12; // Default 12%
+            if (riskProfile === 'conservative') annualRate = 0.09;
+            if (riskProfile === 'aggressive') annualRate = 0.15;
+            
+            document.getElementById('sipNote').textContent = `Based on ${Math.round(annualRate * 100)}% expected annual return`;
+            
+            // Calculate SIP projections using compound interest formula
+            const monthlyRate = annualRate / 12;
+            
+            // 10 year projection
+            const months10 = 120;
+            const totalInvested10 = sipAmount * months10;
+            const futureValue10 = sipAmount * (((Math.pow(1 + monthlyRate, months10) - 1) / monthlyRate) * (1 + monthlyRate));
+            const returns10 = futureValue10 - totalInvested10;
+            
+            // 20 year projection
+            const months20 = 240;
+            const totalInvested20 = sipAmount * months20;
+            const futureValue20 = sipAmount * (((Math.pow(1 + monthlyRate, months20) - 1) / monthlyRate) * (1 + monthlyRate));
+            const returns20 = futureValue20 - totalInvested20;
+            
+            // Update 10 year displays
+            document.getElementById('invested10').textContent = formatCurrency(totalInvested10);
+            document.getElementById('returns10').textContent = formatCurrency(returns10);
+            document.getElementById('corpus10').textContent = formatCurrency(futureValue10);
+            
+            // Update 20 year displays
+            document.getElementById('invested20').textContent = formatCurrency(totalInvested20);
+            document.getElementById('returns20').textContent = formatCurrency(returns20);
+            document.getElementById('corpus20').textContent = formatCurrency(futureValue20);
+            
+            // Update investment tips
+            updateInvestmentTips(sipAmount, optimal, futureValue20, riskProfile);
+        }
+        
+        function updateInvestmentTips(current, optimal, corpus20, risk) {
+            const tipsElement = document.getElementById('investmentTips');
+            let tips = [];
+            
+            if (current === 0) {
+                tips = [
+                    'Your expenses are currently too high to invest',
+                    `Reduce expenses to start with ₹${formatNumber(optimal)} monthly SIP`,
+                    'Even ₹1000/month can grow to significant wealth over time',
+                    'Focus on expense reduction and emergency fund first'
+                ];
+            } else if (current < optimal) {
+                tips = [
+                    `You can currently invest ₹${formatNumber(current)}/month`,
+                    `Target: ₹${formatNumber(optimal)}/month for optimal wealth building`,
+                    `Potential 20-year wealth: ₹${formatLakhs(corpus20)}`,
+                    'Start with Nifty 50 index funds for diversified exposure'
+                ];
+            } else {
+                tips = [
+                    `Excellent! You can afford ₹${formatNumber(current)}/month SIP`,
+                    `20-year wealth potential: ₹${formatLakhs(corpus20)}`,
+                    'Diversify across large-cap, mid-cap, and small-cap funds',
+                    'Consider international funds for global diversification'
+                ];
+            }
+            
+            // Add risk-specific tips
+            if (risk === 'conservative') {
+                tips.push('Conservative: Focus on large-cap index funds and debt funds');
+            } else if (risk === 'aggressive') {
+                tips.push('Aggressive: Add small-cap funds and sector-specific ETFs');
+            }
+            
+            tipsElement.innerHTML = tips.map(tip => `<li>${tip}</li>`).join('');
+        }
+        
+        function showStatusAlert(income, expenses, available, recommended) {
+            const alertDiv = document.getElementById('statusAlert');
+            const expenseRatio = (expenses / income) * 100;
+            const savingsRatio = (available / income) * 100;
+            
+            let alertClass = '';
+            let alertHTML = '';
+            
+            if (available <= 0) {
+                alertClass = 'alert-danger';
+                alertHTML = `
+                    <h3>🚨 Financial Emergency</h3>
+                    <p><strong>You're spending ${expenseRatio.toFixed(0)}% of your income!</strong></p>
+                    <p>Reduce expenses by ₹${formatNumber(Math.abs(available))} to create room for savings.</p>
+                `;
+            } else if (savingsRatio < 15) {
+                alertClass = 'alert-warning';
+                const shortfall = recommended - available;
+                alertHTML = `
+                    <h3>⚠️ Expenses Too High</h3>
+                    <p><strong>Current: ${expenseRatio.toFixed(0)}% expenses, ${savingsRatio.toFixed(0)}% savings</strong></p>
+                    <p>Reduce expenses by ₹${formatNumber(shortfall)} to follow the 20% savings rule.</p>
+                `;
+            } else {
+                alertClass = 'alert-success';
+                alertHTML = `
+                    <h3>✅ Great Financial Health</h3>
+                    <p><strong>Saving ${savingsRatio.toFixed(0)}% of income (Target: 20%)</strong></p>
+                    <p>You're on track for excellent long-term wealth building!</p>
+                `;
+            }
+            
+            alertDiv.innerHTML = `<div class="alert ${alertClass}">${alertHTML}</div>`;
+        }
+        
+        function resetSIPProjections() {
+            const sipElements = ['invested10', 'returns10', 'corpus10', 'invested20', 'returns20', 'corpus20'];
+            sipElements.forEach(id => {
+                document.getElementById(id).textContent = '₹0';
+            });
+        }
+        
+        function resetAllDisplays() {
+            // Reset summary cards
+            document.getElementById('totalIncome').textContent = '₹0';
+            document.getElementById('totalExpenses').textContent = '₹0';
+            document.getElementById('savingsAvailable').textContent = '₹0';
+            
+            // Reset recommendations
+            document.getElementById('availableAmount').textContent = '₹0';
+            document.getElementById('availablePercent').textContent = '0%';
+            document.getElementById('recommendedSavings').textContent = '₹0';
+            document.getElementById('optimalSIP').textContent = '₹0';
+            
+            // Reset SIP projections
+            document.getElementById('sipCapacity').textContent = '₹0';
+            resetSIPProjections();
+            
+            // Clear alert
+            document.getElementById('statusAlert').innerHTML = '';
+        }
+        
+        function formatCurrency(amount) {
+            return '₹' + Math.round(amount).toLocaleString('en-IN');
+        }
+        
+        function formatNumber(amount) {
+            return Math.round(amount).toLocaleString('en-IN');
+        }
+        
+        function formatLakhs(amount) {
+            if (amount >= 10000000) {
+                return (amount / 10000000).toFixed(1) + ' Crore';
+            } else if (amount >= 100000) {
+                return (amount / 100000).toFixed(1) + ' Lakh';
+            } else {
+                return Math.round(amount).toLocaleString('en-IN');
+            }
+        }
+        
+        // Initialize with demo data after 2 seconds
+        setTimeout(() => {
+            if (parseFloat(document.getElementById('monthlyIncome').value || 0) === 0) {
+                document.getElementById('monthlyIncome').value = '100000';
+                document.getElementById('fixedExpenses').value = '50000';
+                document.getElementById('variableExpenses').value = '25000';
+                calculateBudget();
+            }
+        }, 2000);
+        
+        // Initial calculation
+        calculateBudget();
+    </script>
+</body>
+</html>
